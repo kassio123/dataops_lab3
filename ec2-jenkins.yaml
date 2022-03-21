@@ -1,7 +1,7 @@
 # Versão do template - não alterar
 AWSTemplateFormatVersion: "2010-09-09"
 
-# Descriçãog que será utilizada na stack
+# Descrição que será utilizada na stack
 Description:
   Provisiona maquina EC2 com jenkins
 
@@ -10,7 +10,7 @@ Parameters:
   key:
     Type: String
   iamprofile:
-    Type: String
+    Type: String  
 
 # Recursos que serão provisionados
 Resources:  
