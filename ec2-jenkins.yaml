@@ -10,7 +10,7 @@ Parameters:
   key:
     Type: String
   iamprofile:
-    Type: String  
+    Type: String
 
 # Recursos que serão provisionados
 Resources:  
@@ -24,23 +24,7 @@ Resources:
         - CidrIp: 0.0.0.0/0
           FromPort: 22
           ToPort: 22
-          IpProtocol: tcp
-        ##### NOVO - INÍCIO #####
-        - CidrIp: 0.0.0.0/0
-          FromPort: 8080
-          ToPort: 8080
-          IpProtocol: tcp
-        ##### NOVO - FIM #####
-  ##### NOVO - INÍCIO #####
-  #provisionar IP Elástico
-  IPAddress:
-    Type: AWS::EC2::EIP
-  IPAssoc:
-    Type: AWS::EC2::EIPAssociation
-    Properties:
-      InstanceId: !Ref 'EC2'
-      EIP: !Ref 'IPAddress'
-  ##### NOVO - FIM #####
+          IpProtocol: tcp  
   # Provisionar EC2
   EC2:
     Type: AWS::EC2::Instance
@@ -57,10 +41,11 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
+          yum update –y
           wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
           rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
           yum upgrade -y
-          amazon-linux-extras install epel -y
-          yum install -y jenkins java-1.8.0-openjdk
-          sudo systemctl daemon-reload
+          amazon-linux-extras install java-openjdk11 -y
+          sudo yum install jenkins -y
+          sudo systemctl enable jenkins
           sudo systemctl start jenkins
